@@ -1,5 +1,6 @@
 package com.example.forum.controller;
 
+import com.example.forum.dto.TopicRequest;
 import com.example.forum.entity.Topic;
 import com.example.forum.service.TopicService;
 // import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class TopicController {
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Topic> createTopic(@RequestParam String name) {
-        Topic topic = topicService.createTopic(name);
+    public ResponseEntity<Topic> createTopic(@RequestBody TopicRequest req) {
+        Topic topic = topicService.createTopic(req.getName());
         return ResponseEntity.ok(topic);
     }
 
