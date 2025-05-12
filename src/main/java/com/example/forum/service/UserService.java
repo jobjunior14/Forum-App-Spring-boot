@@ -1,18 +1,20 @@
 package com.example.forum.service;
 
+import com.example.forum.config.UserDetailsImpl;
 import com.example.forum.entity.User;
 import com.example.forum.repository.UserRepository;
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-// import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 // import java.util.ArrayList;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final MailService mailService;
 
@@ -45,14 +47,25 @@ public class UserService {
         return false;
     }
 
-    public User loginUserByEmail(String email) {
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        return loadUserByEmail(email);
+    }
+
+    private UserDetails loadUserByEmail(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found: " + email));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+        return new UserDetailsImpl(user);
+    }
+
+    public UserDetails loginUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
         if (!user.isVerified()) {
             throw new UsernameNotFoundException("User not verified: " + email);
         }
 
-        return user;
+        return new UserDetailsImpl(user);
 
     }
 
