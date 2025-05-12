@@ -41,8 +41,8 @@ public class TopicController {
 
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Topic> updateTopic(@PathVariable Long id, @RequestParam String name) {
-        Topic topic = topicService.updateTopic(id, name);
+    public ResponseEntity<Topic> updateTopic(@PathVariable Long id, @RequestBody TopicRequest req) {
+        Topic topic = topicService.updateTopic(id, req.getName());
         return ResponseEntity.ok(topic);
     }
 
