@@ -17,14 +17,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final MailService mailService;
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository, @Lazy MailService mailService, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
     }
-
-    private PasswordEncoder passwordEncoder;
 
     public User registerUser(String username, String password, String email) {
         String hashedPassword = hashPassword(password);
