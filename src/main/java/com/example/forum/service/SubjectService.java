@@ -25,9 +25,9 @@ public class SubjectService {
         this.fileStorageService = fileStorageService;
     }
 
-    public Page<SubjectResponse> findSubjects(String query, Long topicId, int page, int size) {
+    public Page<SubjectResponse> findSubjects(String subjectName, Long topicId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        return subjectRepository.findByQueryAndTopic(query, topicId, pageable)
+        return subjectRepository.findByQueryAndTopic(subjectName, topicId, pageable)
                 .map(subject -> new SubjectResponse(subject.getId(), subject.getTitle(), subject.getContent(),
                         subject.getUser().getUsername(),
                         subject.getTopic() != null ? subject.getTopic().getName() : null,

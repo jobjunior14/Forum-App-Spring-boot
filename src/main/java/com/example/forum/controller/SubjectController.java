@@ -31,11 +31,11 @@ public class SubjectController {
 
     @GetMapping
     public ResponseEntity<Page<SubjectResponse>> getSubjects(
-            @RequestParam String query,
+            @RequestParam String subjectName,
             @RequestParam(required = false) Long topicId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(subjectService.findSubjects(query, topicId, page, size));
+        return ResponseEntity.ok(subjectService.findSubjects(subjectName, topicId, page, size));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
