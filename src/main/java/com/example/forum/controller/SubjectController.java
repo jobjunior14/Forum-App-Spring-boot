@@ -7,7 +7,6 @@ import com.example.forum.entity.User;
 import com.example.forum.entity.Subject;
 import com.example.forum.service.SubjectService;
 import com.example.forum.service.FileStorageService;
-// import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,16 +39,15 @@ public class SubjectController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> createSubject(
+    public ResponseEntity<String> createSubject(
             @ModelAttribute SubjectRequest req) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         User user = userDetails.getUser();
 
-        System.out.println(user);
         if (req == null || req.getTitle() == null) {
-            return ResponseEntity.status(401).build();
+            return ResponseEntity.status(401).body("Vous devrez etre connecter");
         }
 
         String imagePath = null;

@@ -29,7 +29,7 @@ public class SubjectService {
         Pageable pageable = PageRequest.of(page, size);
         return subjectRepository.findByQueryAndTopic(subjectName, topicId, pageable)
                 .map(subject -> new SubjectResponse(subject.getId(), subject.getTitle(), subject.getContent(),
-                        subject.getUser().getUsername(),
+                        subject.getUser().getNameUser(),
                         subject.getTopic() != null ? subject.getTopic().getName() : null,
                         subject.getImagePath(), subject.getCreatedAt()));
     }

@@ -95,6 +95,10 @@ public class User implements UserDetails {
         return this.email; // or username field
     }
 
+    public String getNameUser() {
+        return this.username;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
