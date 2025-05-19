@@ -1,12 +1,6 @@
 package com.example.forum.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +9,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "TEXT")
     private String content;
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -25,18 +20,14 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "parent_comment_id")
     private Comment parentComment;
+    @Column(name = "image_path")
     private String imagePath;
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    public Comment() {
-    }
-
-    public Comment(String content, User user, Subject subject, Comment parentComment, String imagePath) {
-        this.content = content;
-        this.user = user;
-        this.subject = subject;
-        this.parentComment = parentComment;
-        this.imagePath = imagePath;
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
     }
 
     // Getters and Setters
