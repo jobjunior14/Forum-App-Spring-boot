@@ -27,7 +27,7 @@ public class TopicService {
         return topicPage.map(topic -> new TopicResponse(
                 topic.getId(),
                 topic.getName(),
-                topic.getUser().getUsername(),
+                topic.getUser().getNameUser(),
                 topic.getUser().getId()));
     }
 
@@ -36,7 +36,7 @@ public class TopicService {
         topic.setName(name);
         topic.setUser(user);
         Topic saved = topicRepository.save(topic);
-        return new TopicResponse(saved.getId(), saved.getName(), saved.getUser().getUsername(),
+        return new TopicResponse(saved.getId(), saved.getName(), saved.getUser().getNameUser(),
                 saved.getUser().getId());
     }
 
@@ -48,7 +48,7 @@ public class TopicService {
         }
         topic.setName(name);
         Topic updated = topicRepository.save(topic);
-        return new TopicResponse(updated.getId(), updated.getName(), updated.getUser().getUsername(),
+        return new TopicResponse(updated.getId(), updated.getName(), updated.getUser().getNameUser(),
                 updated.getUser().getId());
     }
 

@@ -5,12 +5,10 @@ import com.example.forum.dto.TopicRequest;
 import com.example.forum.dto.TopicResponse;
 import com.example.forum.entity.User;
 import com.example.forum.service.TopicService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
