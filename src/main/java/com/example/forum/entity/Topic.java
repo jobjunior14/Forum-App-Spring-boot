@@ -1,10 +1,6 @@
 package com.example.forum.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "topics")
@@ -13,13 +9,9 @@ public class Topic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
-    public Topic() {
-    }
-
-    public Topic(String name) {
-        this.name = name;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     // Getters and Setters
     public Long getId() {
@@ -36,5 +28,13 @@ public class Topic {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
