@@ -79,8 +79,10 @@ public class CommentController {
     @DeleteMapping("/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> deleteComment(
-            @PathVariable Long id,
-            @AuthenticationPrincipal User user) {
+            @PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
         commentService.deleteComment(id, user);
         return ResponseEntity.ok().build();
     }
