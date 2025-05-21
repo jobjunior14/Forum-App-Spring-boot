@@ -1,16 +1,21 @@
 package com.example.forum.controller;
 
+import com.example.forum.config.UserDetailsImpl;
+import com.example.forum.dto.CommentRequest;
 import com.example.forum.dto.CommentResponse;
 import com.example.forum.entity.User;
 import com.example.forum.service.CommentService;
 import com.example.forum.service.FileStorageService;
+
 // import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 // import java.util.List;
 
 @RestController
@@ -33,28 +38,41 @@ public class CommentController {
         return ResponseEntity.ok(commentService.findCommentsBySubjectId(subjectId, page, size));
     }
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<CommentResponse> createComment(
-            @RequestParam String content,
-            @RequestParam Long subjectId,
-            @RequestParam(required = false) Long parentCommentId,
-            @RequestParam(required = false) MultipartFile image,
-            @AuthenticationPrincipal User user) {
-        String imagePath = image != null && !image.isEmpty() ? fileStorageService.storeFile(image) : null;
-        CommentResponse comment = commentService.createComment(content, subjectId, parentCommentId, imagePath, user);
+    public ResponseEntity<CommentResponse> createComment(@ModelAttribute CommentRequest req) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
+        String imagePath = null;
+
+        if (req.getImage() != null && !req.getImage().isEmpty()) {
+            imagePath = fileStorageService.storeFile(req.getImage());
+        }
+
+        CommentResponse comment = commentService.createComment(req.getContent(), req.getSubjectId(),
+                req.getParentCommentId(), imagePath, user);
         return ResponseEntity.ok(comment);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(path = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CommentResponse> updateComment(
-            @PathVariable Long id,
-            @RequestParam String content,
-            @RequestParam(required = false) MultipartFile image,
-            @AuthenticationPrincipal User user) {
-        String imagePath = image != null && !image.isEmpty() ? fileStorageService.storeFile(image) : null;
-        CommentResponse comment = commentService.updateComment(id, content, imagePath, user);
+            @PathVariable Long id, @ModelAttribute CommentRequest req) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        User user = userDetails.getUser();
+
+        String imagePath = null;
+
+        if (req.getImage() != null && !req.getImage().isEmpty()) {
+            imagePath = fileStorageService.storeFile(req.getImage());
+        }
+
+        CommentResponse comment = commentService.updateComment(id, req.getContent(), imagePath, user);
         return ResponseEntity.ok(comment);
     }
 
