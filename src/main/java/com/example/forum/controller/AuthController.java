@@ -1,6 +1,7 @@
 package com.example.forum.controller;
 
 import com.example.forum.dto.LoginRequest;
+import com.example.forum.dto.LoginResponse;
 import com.example.forum.dto.RegisterRequest;
 import com.example.forum.entity.User;
 import com.example.forum.service.JwtService;
@@ -33,14 +34,16 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         UserDetails user = userService.loginUserByEmail(request.getEmail());
         if (userService.verifyPassword(request.getPassword(), user.getPassword())) {
             String token = jwtService.generateToken(request.getEmail());
-            return ResponseEntity.ok(token);
+            Long userId = userService.findUserIdByEmail(request.getEmail());
+
+            return ResponseEntity.ok(new LoginResponse(userId, token));
         }
 
-        return ResponseEntity.status(401).body("Invalid credentials");
+        return ResponseEntity.status(401).body(new LoginResponse(null, "Invalid credentials"));
     }
 
     @PostMapping("/verify-otp")

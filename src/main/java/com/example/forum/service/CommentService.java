@@ -28,7 +28,7 @@ public class CommentService {
                                 .map(comment -> new CommentResponse(
                                                 comment.getId(),
                                                 comment.getContent(),
-                                                comment.getUser().getUsername(),
+                                                comment.getUser().getNameUser(),
                                                 comment.getUser().getId(),
                                                 comment.getSubject().getId(),
                                                 comment.getParentComment() != null ? comment.getParentComment().getId()
@@ -55,7 +55,7 @@ public class CommentService {
                 return new CommentResponse(
                                 saved.getId(),
                                 saved.getContent(),
-                                saved.getUser().getUsername(),
+                                saved.getUser().getNameUser(),
                                 saved.getUser().getId(),
                                 saved.getSubject().getId(),
                                 saved.getParentComment() != null ? saved.getParentComment().getId() : null,
@@ -77,7 +77,7 @@ public class CommentService {
                 return new CommentResponse(
                                 updated.getId(),
                                 updated.getContent(),
-                                updated.getUser().getUsername(),
+                                updated.getUser().getNameUser(),
                                 updated.getUser().getId(),
                                 updated.getSubject().getId(),
                                 updated.getParentComment() != null ? updated.getParentComment().getId() : null,
